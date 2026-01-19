@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 350px; padding: 16px; font-family: 'Segoe UI', sans-serif; background-color: #202020; color: white; }
+    h2 { margin-top: 0; font-size: 18px; color: #4CAF50; }
+    label { display: block; margin-top: 10px; font-size: 12px; color: #aaa; }
+    input, select { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; background: #333; border: 1px solid #444; color: white; border-radius: 4px; }
+    button { width: 100%; margin-top: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    button:hover { background-color: #45a049; }
+    .hidden { display: none; }
+    #status { margin-top: 10px; text-align: center; font-size: 13px; }
+    .error { color: #ff5252; }
+    .success { color: #4CAF50; }
+  </style>
+</head>
+<body>
+  <h2>Save to Lock N' Key</h2>
+  
+  <div id="form">
+    <label>Name</label>
+    <input type="text" id="name" placeholder="e.g. AWS Production Key" autofocus>
+    
+    <label>Type</label>
+    <select id="type">
+      <option value="Password">Password</option>
+      <option value="API Key">API Key</option>
+      <option value="Token">Token</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label>Value (Selected)</label>
+    <input type="text" id="value" readonly>
+
+    <label>Shortcut (Optional)</label>
+    <input type="text" id="shortcut" placeholder="//aws">
+
+    <label>Tags (Comma separated)</label>
+    <input type="text" id="tags" placeholder="dev, cloud">
+
+    <button id="saveBtn">Save to Vault</button>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
