@@ -49,8 +49,7 @@ This repository contains the Windows installer.
 ## How to Use
 
 ### 1. Setup Master Password
-On first launch, you will be asked to create a **Master Password**. This password encrypts your vault.
-*   **Warning:** There is no "Forgot Password" link. If you lose this password, your data is lost forever. We cannot recover it for you.
+On first launch, you will be asked to create a **Master Password** along with some personal questions which will help you to recover the vault if your master password is lost. This password encrypts your vault.
 
 ### 2. Dashboard & Adding Secrets
 *   Use the **Dashboard** to view your secrets.
@@ -59,13 +58,13 @@ On first launch, you will be asked to create a **Master Password**. This passwor
 
 ### 3. Quick Access (The Power Move)
 *   Press **`Alt + Space`** anywhere in Windows to open the Quick Access bar.
-*   Type the name of your secret.
-*   Press **Enter** to copy it to your clipboard (or auto-paste if configured).
+*   Type the name or shortcut of your secret.
+*   Press **Enter** to directly paste in your working IDE without using clipboard.
 *   Use Biometrics (Fingerprint) to authenticate the action instantly.
 
 ### 4. Browser Extension
 To install the companion extension:
-1.  Go to `Settings` > `Extension` in the desktop app.
+1.  Go to `Overview` > `Install Extension` in the desktop app.
 2.  Follow the instructions to load the extension in functionality in Chrome/Edge Developer Mode.
 
 ---
@@ -76,7 +75,7 @@ Lock N' Key allows you to securely transfer your vault between devices using our
 
 ### How to Transfer
 1.  **Export:** On your source machine, go to `Settings` > `Export Vault` > `Encrypted Backup (.lnk)`.
-2.  **Encrypt:** You will be asked to set a **Backup Password**. This is separate from your Master Password and is required to decrypt the file on the new machine.
+2.  **Encrypt:** You will be asked to set a **Backup Password** mostly you master password. This is required to decrypt the file on the new machine.
 3.  **Transfer:** Move the generated `.lnk` file to your new machine (via USB, Cloud, etc.). The file is AES-256 encrypted, so it is safe to transfer.
 4.  **Import:** On your new machine, go to `Settings` > `Import Backup` and select the file. Enter the **Backup Password** to restore your secrets.
 
