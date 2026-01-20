@@ -103,12 +103,6 @@ class CounterManager {
     }
 
     async incrementDownloads() {
-        // Optimistic update
-        if (typeof this.downloads === 'number') {
-            this.downloads++;
-            this.updateDisplay(this.downloadCountElement, this.downloads);
-        }
-
         // Hit API (up)
         const newVal = await this.fetchData(`${CONFIG.keys.downloads}/up`);
         if (newVal !== null) {
@@ -126,12 +120,6 @@ class CounterManager {
             if (this.heartIcon) this.heartIcon.setAttribute('fill', 'none');
             localStorage.setItem(CONFIG.localKeys.hasLiked, 'false');
 
-            // Optimistic update
-            if (typeof this.likes === 'number') {
-                this.likes--;
-                this.updateDisplay(this.likeCountElement, this.likes);
-            }
-
             // Sync with Server (Down)
             const newVal = await this.fetchData(`${CONFIG.keys.likes}/down`);
             if (newVal !== null) {
@@ -144,12 +132,6 @@ class CounterManager {
             this.setLikedState();
             this.animateLike();
             localStorage.setItem(CONFIG.localKeys.hasLiked, 'true');
-
-            // Optimistic update
-            if (typeof this.likes === 'number') {
-                this.likes++;
-                this.updateDisplay(this.likeCountElement, this.likes);
-            }
 
             // Sync with Server (Up)
             const newVal = await this.fetchData(`${CONFIG.keys.likes}/up`);
