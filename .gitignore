@@ -48,4 +48,3 @@ app.*.map.json
 windows/flutter/ephemeral/
 linux/flutter/ephemeral/
 macos/Flutter/ephemeral/
-web_landing

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lock N' Key - The Ultimate Personal Vault</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" data-aos="fade-down">
+        <div class="logo-container">
+            <img src="assets/logo.png" alt="Lock N' Key Logo" class="nav-logo">
+            <div class="logo-text">Lock N' Key</div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#extension">Extension</a>
+            <a href="#active-stats" style="color: var(--primary);">v1.0.0</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+            <h1>True Security. <br> <span class="highlight">Zero Trace.</span></h1>
+            <p>
+                The developer-first password manager. AES-256 encrypted. Local-only.
+                <br>Stop exposing your API keys to the cloud.
+            </p>
+
+            <div class="cta-container">
+                <div class="cta-group">
+                    <a href="downloads/lock_n_key_setup.exe" class="btn-large" id="downloadBtn" download>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="icon">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Download for Windows
+                        <span class="badge" id="downloadCount">...</span>
+                    </a>
+
+                    <button class="btn-like" id="likeBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                        <span id="likeCount">...</span>
+                    </button>
+                </div>
+                <span class="version-text">Open Source • Windows 10/11 • 64-bit</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Section (About App) -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 data-aos="fade-up">The Intuition</h2>
+            <div class="intuition-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="intuition-layout">
+                    <div class="intuition-logo">
+                        <img src="assets/logo.png" alt="Lock N' Key Logo">
+                    </div>
+                    <div class="about-content">
+                        <p>
+                            Every time you paste an API key, you’re taking a risk. Cloud-based password managers are
+                            convenient, but they are also massive targets for hackers.
+                        </p>
+                        <p>
+                            <strong>Lock N' Key</strong> takes a radical approach: <strong>Zero Trust
+                                Networking</strong>.
+                        </p>
+                        <p>
+                            We store your data <strong>exclusively on your machine</strong>, encrypted with AES-256-GCM.
+                            No "sync servers", no "master keys" on our end, and absolutely no outgoing internet requests
+                            from the core vault.
+                            It's the digital equivalent of a physical safe in your home office.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 data-aos="fade-up">Built for Power Users</h2>
+            <div class="feature-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3>Ironclad & Offline</h3>
+                    <p>AES-256 encryption with a locally managed key. No external servers. Your vault file is portable
+                        and yours to control.
+                    </p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3>Instant Global Search</h3>
+                    <p>Hit <code>Alt + Space</code> to trigger the Quick Access bar. Find and paste secrets into any IDE
+                        without lifting your fingers from the keyboard.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="icon-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3>Biometric Unlocking</h3>
+                    <p>Native Windows Hello support. Authenticate with your fingerprint or face login for split-second
+                        access.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="icon-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </div>
+                    <h3>Cross-Device</h3>
+                    <p>Securely transfer your vault between devices using our encrypted <code>.lnk</code> backup format.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Extension Section -->
+    <section id="extension" class="extension-section">
+        <div class="container split-layout">
+            <div class="text-content" data-aos="fade-right">
+                <h2>How It Works</h2>
+                <p>A complete lifecycle of security, from the moment you install to your daily workflow.</p>
+                <div class="steps-container">
+                    <div class="step-item">
+                        <div class="step-number">01</div>
+                        <div class="step-text">
+                            <h4>Register & Encrypt</h4>
+                            <p>Create your Master Password on first launch. This generates your unique AES-256 vault
+                                key.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">02</div>
+                        <div class="step-text">
+                            <h4>Populate Vault</h4>
+                            <p>Add secrets manually via the Dashboard, or capture them instantly with the Browser
+                                Extension.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">03</div>
+                        <div class="step-text">
+                            <h4>Quick Access</h4>
+                            <p>Usage is just a shortcut away. Press <code>Alt + Space</code>, search your secret, and
+                                paste.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-content" data-aos="fade-left">
+                <div class="browser-mockup">
+                    <div class="browser-bar">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                    </div>
+                    <div class="browser-body">
+                        <!-- Simplified visual using CSS -->
+                        <div class="context-menu">
+                            <div class="menu-item">Copy</div>
+                            <div class="menu-item">Paste</div>
+                            <div class="menu-item highlight">Save to Lock N' Key</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Section -->
+    <section id="creator" class="creator-section">
+        <div class="container" data-aos="fade-up">
+            <h2>About the Creator</h2>
+            <div class="creator-card">
+                <div class="creator-avatar">RK</div>
+                <div class="creator-info">
+                    <h3>Ratik Krishna</h3>
+                    <p class="role">Lead Developer & Security Enthusiast</p>
+                    <p class="bio">
+                        "I asked myself: Can I manage my keys in a way that's actually developer-friendly? I was tired
+                        of using notepad files, which led me to create Lock N' Key. <br><br>
+                        This is the first version (v1.0), and I have many future enhancements planned. I personally
+                        invite fellow developers to try it out, use it, and share any ideas or feedback. If you
+                        encounter bugs, please report them—your input is invaluable for improving the app."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="active-stats">
+        <div class="container">
+            <p>&copy; 2026 Lock N' Key Security. Built for Developers.</p>
+            <div class="footer-links">
+                <a href="mailto:ratikkrishna15@gmail.com" class="contact-link">ratikkrishna15@gmail.com</a>
+                <span style="margin: 0 1rem; color: rgba(255,255,255,0.2);">|</span>
+                <a href="https://www.linkedin.com/in/ratik-krishna-m-p-17a661290" class="contact-link">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
