@@ -29,6 +29,11 @@ class CounterManager {
         this.loadCounts();
         this.checkLikedStatus();
         this.attachEventListeners();
+
+        // Real-time updates: Poll every 2 seconds
+        setInterval(() => {
+            this.loadCounts();
+        }, 2000);
     }
 
     // Helper to fetch data safely
