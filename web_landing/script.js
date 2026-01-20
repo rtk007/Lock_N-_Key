@@ -1,20 +1,22 @@
-
+// ===============================
 // Counter Configuration
+// ===============================
 const CONFIG = {
-    // API Endpoint (V1 for token support)
     apiBase: 'https://api.counterapi.dev/v1',
     namespace: 'lock_n_key_v1',
-    token: 'ut_Lumh3piycqTZFKjBCOBfB2oJJa05qTI9Sty2CfXS', // Verified token
+    token: 'ut_Lumh3piycqTZFKjBCOBfB2oJJa05qTI9Sty2CfXS', // verified token
     keys: {
         likes: 'likes_count',
         downloads: 'downloads_count'
     },
-    // Local storage keys (only for tracking user status, not counts)
     localKeys: {
         hasLiked: 'lock_n_key_user_has_liked'
     }
 };
 
+// ===============================
+// Counter Manager
+// ===============================
 class CounterManager {
     constructor() {
         this.downloadCountElement = document.getElementById('downloadCount');
@@ -22,126 +24,129 @@ class CounterManager {
         this.likeBtn = document.getElementById('likeBtn');
         this.heartIcon = document.querySelector('.heart-icon');
 
+        this.downloads = 0;
+        this.likes = 0;
+
         this.init();
     }
 
+    // -------------------------------
+    // Init
+    // -------------------------------
     init() {
-        this.loadCounts();
-        this.checkLikedStatus();
+        this.loadCounts();          // load once
+        this.restoreLikeState();    // restore local like
         this.attachEventListeners();
-
-        // Real-time updates: Poll every 2 seconds
-        setInterval(() => {
-            this.loadCounts();
-        }, 2000);
     }
 
-    // Helper to fetch data safely
-    async fetchData(endpoint) {
+    // -------------------------------
+    // Fetch helper
+    // -------------------------------
+    async fetchCount(endpoint) {
         try {
-            // Construct URL with token
             const url = `${CONFIG.apiBase}/${CONFIG.namespace}/${endpoint}?token=${CONFIG.token}`;
-            const response = await fetch(url);
+            const res = await fetch(url);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-            const data = await response.json();
-            return data.count; // CounterAPI.dev returns { "count": 123, ... }
-        } catch (error) {
-            console.error('Error fetching counter:', error);
+            const data = await res.json();
+            return typeof data.count === 'number' ? data.count : null;
+        } catch (err) {
+            console.error('CounterAPI error:', err);
             return null;
         }
     }
 
+    // -------------------------------
+    // Initial load
+    // -------------------------------
     async loadCounts() {
-        // Fetch Downloads
-        const downloads = await this.fetchData(`${CONFIG.keys.downloads}`);
+        const downloads = await this.fetchCount(CONFIG.keys.downloads);
+        const likes = await this.fetchCount(CONFIG.keys.likes);
+
         if (downloads !== null) {
             this.downloads = downloads;
-            this.updateDisplay(this.downloadCountElement, this.downloads);
-        } else {
-            // Fallback
-            this.downloads = 0;
-            this.updateDisplay(this.downloadCountElement, 0);
+            this.updateDisplay(this.downloadCountElement, downloads);
         }
 
-        // Fetch Likes
-        const likes = await this.fetchData(`${CONFIG.keys.likes}`);
         if (likes !== null) {
             this.likes = likes;
-            this.updateDisplay(this.likeCountElement, this.likes);
-        } else {
-            // Fallback
-            this.likes = 0;
-            this.updateDisplay(this.likeCountElement, 0);
+            this.updateDisplay(this.likeCountElement, likes);
         }
     }
 
-    updateDisplay(element, value) {
-        if (!element) return;
-        if (typeof value === 'number') {
-            element.innerText = value.toLocaleString();
-        } else {
-            element.innerText = value;
-        }
+    // -------------------------------
+    // Display helper
+    // -------------------------------
+    updateDisplay(el, value) {
+        if (!el) return;
+        el.innerText = value.toLocaleString();
     }
 
-    checkLikedStatus() {
+    // -------------------------------
+    // Like state
+    // -------------------------------
+    restoreLikeState() {
         const hasLiked = localStorage.getItem(CONFIG.localKeys.hasLiked) === 'true';
-        if (hasLiked) {
-            this.setLikedState();
-        }
+        if (hasLiked) this.setLikedUI(true);
     }
 
-    setLikedState() {
-        this.likeBtn.classList.add('liked');
-        if (this.heartIcon) {
+    setLikedUI(active) {
+        if (!this.likeBtn || !this.heartIcon) return;
+
+        if (active) {
+            this.likeBtn.classList.add('liked');
             this.heartIcon.setAttribute('fill', 'currentColor');
+        } else {
+            this.likeBtn.classList.remove('liked');
+            this.heartIcon.setAttribute('fill', 'none');
         }
     }
 
+    // -------------------------------
+    // Increment download
+    // -------------------------------
     async incrementDownloads() {
-        // Hit API (up)
-        const newVal = await this.fetchData(`${CONFIG.keys.downloads}/up`);
+        const newVal = await this.fetchCount(`${CONFIG.keys.downloads}/up`);
         if (newVal !== null) {
             this.downloads = newVal;
-            this.updateDisplay(this.downloadCountElement, this.downloads);
+            this.updateDisplay(this.downloadCountElement, newVal);
         }
     }
 
+    // -------------------------------
+    // Toggle like
+    // -------------------------------
     async toggleLike() {
         const hasLiked = localStorage.getItem(CONFIG.localKeys.hasLiked) === 'true';
 
         if (hasLiked) {
-            // Unlike functionality
-            this.likeBtn.classList.remove('liked');
-            if (this.heartIcon) this.heartIcon.setAttribute('fill', 'none');
+            // UNLIKE
             localStorage.setItem(CONFIG.localKeys.hasLiked, 'false');
+            this.setLikedUI(false);
 
-            // Sync with Server (Down)
-            const newVal = await this.fetchData(`${CONFIG.keys.likes}/down`);
+            const newVal = await this.fetchCount(`${CONFIG.keys.likes}/down`);
             if (newVal !== null) {
                 this.likes = newVal;
-                this.updateDisplay(this.likeCountElement, this.likes);
+                this.updateDisplay(this.likeCountElement, newVal);
             }
-
         } else {
-            // Like functionality
-            this.setLikedState();
-            this.animateLike();
+            // LIKE
             localStorage.setItem(CONFIG.localKeys.hasLiked, 'true');
+            this.setLikedUI(true);
+            this.animateLike();
 
-            // Sync with Server (Up)
-            const newVal = await this.fetchData(`${CONFIG.keys.likes}/up`);
+            const newVal = await this.fetchCount(`${CONFIG.keys.likes}/up`);
             if (newVal !== null) {
                 this.likes = newVal;
-                this.updateDisplay(this.likeCountElement, this.likes);
+                this.updateDisplay(this.likeCountElement, newVal);
             }
         }
     }
 
+    // -------------------------------
+    // Like animation
+    // -------------------------------
     animateLike() {
         this.likeBtn.style.transform = 'scale(1.2)';
         setTimeout(() => {
@@ -149,6 +154,9 @@ class CounterManager {
         }, 200);
     }
 
+    // -------------------------------
+    // Events
+    // -------------------------------
     attachEventListeners() {
         if (this.likeBtn) {
             this.likeBtn.addEventListener('click', () => this.toggleLike());
@@ -156,22 +164,20 @@ class CounterManager {
 
         const downloadBtn = document.getElementById('downloadBtn');
         if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => {
-                this.incrementDownloads();
-            });
+            downloadBtn.addEventListener('click', () => this.incrementDownloads());
         }
     }
 }
 
-// Initialize when DOM is ready
+// ===============================
+// Boot
+// ===============================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize AOS
     AOS.init({
         duration: 800,
         once: true,
         offset: 100
     });
 
-    // Initialize Counters
     new CounterManager();
 });
