@@ -58,7 +58,8 @@ class CounterManager {
             this.updateDisplay(this.downloadCountElement, this.downloads);
         } else {
             // Fallback
-            this.updateDisplay(this.downloadCountElement, '1,200+');
+            this.downloads = 0;
+            this.updateDisplay(this.downloadCountElement, 0);
         }
 
         // Fetch Likes
@@ -67,7 +68,9 @@ class CounterManager {
             this.likes = likes;
             this.updateDisplay(this.likeCountElement, this.likes);
         } else {
-            this.updateDisplay(this.likeCountElement, '500+');
+            // Fallback
+            this.likes = 0;
+            this.updateDisplay(this.likeCountElement, 0);
         }
     }
 
