@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lock_n_key/models/secret.dart';
 import 'package:lock_n_key/services/secret_service.dart';
+import 'package:lock_n_key/widgets/secure_file_viewer_dialog.dart';
 
 class AddEditSecretScreen extends StatefulWidget {
   const AddEditSecretScreen({super.key});
@@ -172,6 +173,27 @@ class _AddEditSecretScreenState extends State<AddEditSecretScreen> {
         );
       }
     }
+  }
+
+  void _openFullSecureViewer() {
+    if (_valueController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No file content to view.')),
+      );
+      return;
+    }
+    final tempSecret = Secret(
+      id: _existingId ?? 'temp',
+      name: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : (_fileName ?? 'Secret File'),
+      type: 'Secret File',
+      value: _valueController.text,
+      shortcut: _shortcutController.text.trim(),
+      createdAt: _createdAt,
+      fileName: _fileName,
+      fileSize: _fileSize,
+      fileExtension: _fileExtension,
+    );
+    SecureFileViewerDialog.show(context, tempSecret);
   }
 
   // ─── 2FA Backup Codes Logic ──────────────────────────────────────────────
@@ -546,6 +568,11 @@ class _AddEditSecretScreenState extends State<AddEditSecretScreen> {
                           ),
                         ],
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.fullscreen_outlined, color: Colors.cyanAccent),
+                      tooltip: 'View in In-Memory Viewer (No Disk Traces)',
+                      onPressed: _openFullSecureViewer,
                     ),
                     IconButton(
                       icon: const Icon(Icons.download_outlined),

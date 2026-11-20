@@ -7,6 +7,7 @@ import 'package:lock_n_key/routes.dart';
 import 'package:lock_n_key/services/auth_service.dart';
 import 'package:lock_n_key/services/secret_service.dart';
 import 'package:lock_n_key/services/audit_service.dart';
+import 'package:lock_n_key/widgets/secure_file_viewer_dialog.dart';
 
 class SecretsListScreen extends StatefulWidget {
   const SecretsListScreen({super.key});
@@ -111,6 +112,17 @@ class _SecretsListScreenState extends State<SecretsListScreen> {
     if (authenticated && mounted) {
       await Navigator.pushNamed(context, AppRoutes.addSecret, arguments: secret);
       _loadSecrets();
+    }
+  }
+
+  Future<void> _handleViewFile(Secret secret) async {
+    final authenticated = await _authService.authenticateUser(
+      context,
+      reason: 'Authenticate to view "${secret.fileName ?? secret.name}"',
+    );
+
+    if (authenticated && mounted) {
+      await SecureFileViewerDialog.show(context, secret);
     }
   }
 
@@ -298,6 +310,7 @@ class _SecretsListScreenState extends State<SecretsListScreen> {
         child: Column(
           children: [
             ListTile(
+              onTap: () => secret.isFile ? _handleViewFile(secret) : _handleEdit(secret),
               leading: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -355,8 +368,8 @@ class _SecretsListScreenState extends State<SecretsListScreen> {
                   const SizedBox(height: 4),
                   if (secret.isFile)
                     Text(
-                      '${secret.fileName ?? 'File'} • ${_formatBytes(secret.fileSize ?? 0)} • ${secret.fileExtension?.toUpperCase() ?? 'ENC'}',
-                      style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                      '${secret.fileName ?? 'File'} • ${_formatBytes(secret.fileSize ?? 0)} • ${secret.fileExtension?.toUpperCase() ?? 'ENC'} • Tap to View',
+                      style: TextStyle(color: Colors.cyanAccent.withOpacity(0.8), fontSize: 12),
                     )
                   else if (secret.shortcut.isNotEmpty)
                     Text(
@@ -373,15 +386,21 @@ class _SecretsListScreenState extends State<SecretsListScreen> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (secret.isFile)
+                  if (secret.isFile) ...[
                     IconButton(
-                      icon: const Icon(Icons.download_outlined),
-                      tooltip: 'Export File to Disk',
+                      icon: const Icon(Icons.visibility_outlined, color: Colors.cyanAccent),
+                      tooltip: 'View File (In-Memory, No Disk)',
+                      onPressed: () => _handleViewFile(secret),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.file_download_outlined),
+                      tooltip: 'Export to Disk (Optional)',
                       onPressed: () => _handleExportFile(secret),
                     ),
+                  ],
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Edit / View',
+                    tooltip: 'Edit / Details',
                     onPressed: () => _handleEdit(secret),
                   ),
                   IconButton(

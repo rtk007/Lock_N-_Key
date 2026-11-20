@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Lock N' Key"
-#define MyAppVersion "1.0.1"
+#define MyAppVersion "1.0.2"
 #define MyAppPublisher "Lock N' Key Security"
 #define MyAppURL "https://www.locknkey.com"
 #define MyAppExeName "lock_n_key.exe"

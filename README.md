@@ -37,7 +37,7 @@ Every time you paste an API key, store credentials in unencrypted `.env` files, 
 * **👆 Biometric Authentication:** Seamless integration with Windows Hello (Fingerprint & Facial Recognition) for instant, secure unlocking.
 * **💻 Developer Secret Resolver CLI (`locknkey`):** Complete terminal suite (`run`, `list`, `get`, `set`, `delete`, `status`). Run your commands with encrypted credentials dynamically resolved into memory.
 * **🛡️ Git Leak Guard:** Automatic pre-commit hook (`locknkey hook install`) that audits staged commits against your actual vault secrets to block accidental leaks.
-* **📁 Encrypted Secret Files Vault:** Drag-and-drop secure file storage for `.pem`, `.key`, `id_ed25519`, `service-account.json`, `.ovpn`, and `.env` files with in-app text previews and one-click export.
+* **📁 Encrypted Secret Files & In-Memory Viewer:** Drag-and-drop secure file storage for `.pem`, `.key`, `id_ed25519`, `service-account.json`, `.ovpn`, and `.env` files. Features a built-in **in-memory secure file viewer** with line numbers, JSON formatting, search highlighting, and zoomable image preview with **zero plaintext disk traces**. Guarded export to disk is also available when binary tools need it.
 * **📋 2FA Backup Codes Tracker:** Paste multi-code emergency recovery sets with interactive strike-through tracking and low-code depletion alerts.
 * **⏳ Secret Health & TTL Expiry:** Set expiration presets (`30d`, `90d`, `1y`) with live dashboard health scoring and warning alerts before keys expire.
 * **🧩 Companion Browser Extension:** Dedicated Chrome and Edge extension (Manifest V3) to save credentials directly to your local desktop vault over loopback.
@@ -130,7 +130,7 @@ Get-FileHash .\installers\lock_n_key_setup.exe -Algorithm SHA256
 ```
 **Expected SHA-256 Hash:**
 ```
-BCCC18A7D635CABEDBBB9683A699788EE454880C41551D26B82CD57A11DF68A5
+BEE3BBF984604E759F753E16E0710DA21DAEB996D44EFD1E7B542C1409DC837D
 ```
 
 ---
