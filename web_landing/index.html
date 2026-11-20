@@ -4,82 +4,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lock-N-Key Status Update</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: #f9f9f9;
-        }
-
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            font-size: 24px;
-            color: #111;
-            margin-bottom: 24px;
-        }
-
-        ul {
-            margin: 24px 0;
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-style: italic;
-            color: #666;
-        }
-    </style>
+    <title>Lock N' Key - The Developer's Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-        <p>Hi everyone,</p>
 
-        <p>I want to clarify the current status of Lock-N-Key.</p>
-
-        <p>This project began as a personal learning exercise to explore ideas around local security tools. It was never
-            intended to be a commercial product or a mass-distributed security solution. I shared an early build to
-            gather feedback and learn from different technical perspectives.</p>
-
-        <p>Through discussions and feedback, I realized that my build and packaging process was not yet structured or
-            transparent enough for a security-focused application. Even experimental tools in this space require a
-            higher level of verification and reproducibility than I had in place.</p>
-
-        <p>Because of that realization, I have decided to:</p>
-
-        <ul>
-            <li>Remove all installer and executable files from my GitHub</li>
-            <li>Stop sharing compiled versions of the application through this website</li>
-            <li>Keep only the concept and source code available for educational purposes</li>
-            <li>Take time to properly learn secure development and reproducible build practices before sharing binaries
-                again</li>
-        </ul>
-
-        <p>This project remains part of my learning journey as a developer. I did not intend to create harm or mislead
-            anyone, but I take responsibility for not recognizing the risks in how I shared early builds.</p>
-
-        <p>I appreciate the people who raised concerns and asked important questions — that feedback helped me improve
-            my approach and understanding.</p>
-
-        <div class="footer">
-            — Ratik Krishna
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <!-- <img src="assets/logo.png" alt="Lock N' Key Logo" class="nav-logo"> -->
+            <span class="logo-text">Lock N' <span class="highlight">Key</span></span>
+            <span class="badge">v1.0.0</span>
         </div>
-    </div>
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#features">Features</a>
+            <a href="#docs">Documentation</a>
+            <a href="#download" class="nav-download-link">Download</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="overview">
+        <div data-aos="fade-up">
+            <h1>The Vault That <span class="highlight">Never Connects.</span></h1>
+            <p>Lock N' Key is a developer-first password manager built with a radical approach: <strong>Zero Trust
+                    Networking</strong>. Data never leaves your device.</p>
+
+            <!-- CTA Buttons -->
+            <div class="cta-group">
+                <a href="#download" class="btn-large download-trigger">
+                    <i class="fas fa-download"></i>
+                    Download for Windows
+                    <span class="download-badge">v1.0.0 · Free</span>
+                </a>
+                <button id="likeBtn" class="btn-like">
+                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    <span id="likeCount">—</span>
+                </button>
+            </div>
+
+            <p class="version-text">
+                <i class="fas fa-download" style="opacity:0.5; margin-right:4px;"></i>
+                <span id="downloadCount">—</span> downloads &nbsp;•&nbsp; Local-Only &nbsp;•&nbsp; Encrypted &nbsp;•&nbsp; Zero Trust
+            </p>
+
+            <div class="video-container">
+                <video autoplay loop controls playsinline poster="assets/poster_placeholder.jpg">
+                    <source src="assets/demo_video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         DOWNLOAD SECTION
+    ============================================================ -->
+    <section id="download" class="download-section">
+        <div class="container">
+            <div data-aos="fade-up" class="download-header">
+                <h2>Download <span class="highlight">Lock N' Key</span></h2>
+                <p class="download-subtitle">Free forever. No account. No cloud. Just your secrets, on your machine.</p>
+            </div>
+
+            <!-- Download Card -->
+            <div class="download-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="download-card-left">
+                    <div class="platform-icon"><i class="fab fa-windows"></i></div>
+                    <div class="platform-info">
+                        <h3>Windows Desktop</h3>
+                        <p>Windows 10 / 11 &nbsp;•&nbsp; x64</p>
+                        <p class="file-meta"><i class="fas fa-file"></i> lock_n_key_setup.exe &nbsp;•&nbsp; ~38 MB</p>
+                    </div>
+                </div>
+                <a id="downloadBtn" href="https://github.com/rtk007/Lock_N-_Key/raw/main/installers/lock_n_key_setup.exe" download class="btn-download-main">
+                    <i class="fas fa-download"></i>
+                    Download  v1.0.1
+                </a>
+            </div>
+
+            <!-- System Requirements -->
+            <div class="requirements-grid" data-aos="fade-up" data-aos-delay="150">
+                <div class="req-card">
+                    <i class="fas fa-microchip req-icon"></i>
+                    <h4>Processor</h4>
+                    <p>x64-compatible CPU (Intel / AMD)</p>
+                </div>
+                <div class="req-card">
+                    <i class="fas fa-memory req-icon"></i>
+                    <h4>RAM</h4>
+                    <p>Minimum 4 GB (8 GB recommended)</p>
+                </div>
+                <div class="req-card">
+                    <i class="fab fa-windows req-icon"></i>
+                    <h4>OS</h4>
+                    <p>Windows 10 (build 1903+) or Windows 11</p>
+                </div>
+                <div class="req-card">
+                    <i class="fas fa-hdd req-icon"></i>
+                    <h4>Storage</h4>
+                    <p>~50 MB free disk space</p>
+                </div>
+            </div>
+
+            <!-- Windows Defender Warning Guide -->
+            <div class="defender-guide" data-aos="fade-up" data-aos-delay="200">
+                <div class="defender-guide-header">
+                    <div class="defender-icon-wrap">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h3>Why does Windows show a SmartScreen warning?</h3>
+                        <p class="defender-subtitle">This is expected for unsigned indie software. Here's the full
+                            explanation &amp; how to proceed safely.</p>
+                    </div>
+                </div>
+
+                <div class="defender-explanation">
+                    <p>
+                        Windows Defender SmartScreen flags executables that don't yet have a large download
+                        reputation. This is a <strong>trust-based system</strong>, not a virus scan result. Lock N'
+                        Key contains <strong>no telemetry, no network calls, and no background services</strong>.
+                        The source code is 100% open on GitHub for inspection.
+                    </p>
+                </div>
+
+                <!-- Steps -->
+                <div class="defender-steps">
+                    <div class="defender-step">
+                        <div class="dstep-num">1</div>
+                        <div class="dstep-body">
+                            <h4>Click <em>"More info"</em> on the SmartScreen popup</h4>
+                            <p>When the blue dialog appears, don't close it. Look for the small grey text
+                                that says <strong>"More info"</strong> and click it.</p>
+                            <div class="dstep-img-wrap">
+                                <div class="smartscreen-mockup">
+                                    <div class="ss-header"><i class="fas fa-shield-alt"></i> Windows protected your PC</div>
+                                    <p class="ss-body">Microsoft Defender SmartScreen prevented an unrecognized app from starting. Running this app might put your PC at risk.</p>
+                                    <div class="ss-actions">
+                                        <span class="ss-more-info">More info ›</span>
+                                        <span class="ss-dont-run">Don't run</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="defender-step">
+                        <div class="dstep-num">2</div>
+                        <div class="dstep-body">
+                            <h4>Click <em>"Run anyway"</em></h4>
+                            <p>After clicking <strong>"More info"</strong>, the dialog expands to show the app
+                                name and publisher. A <strong>"Run anyway"</strong> button will appear at the
+                                bottom. Click it to proceed with the installation.</p>
+                        </div>
+                    </div>
+
+                    <div class="defender-step">
+                        <div class="dstep-num">3</div>
+                        <div class="dstep-body">
+                            <h4>Verify integrity (optional but recommended)</h4>
+                            <p>You can verify the file hasn't been tampered with by checking its SHA-256
+                                hash before running:</p>
+                            <div class="hash-box">
+                                <span class="hash-label">SHA-256</span>
+                                <code id="fileHash">519D50AF9B1EEC0A18419AEB607B384AFD7AB7A101A96E7A7E2C5C0A4A84CA1F</code>
+                                <button class="copy-hash-btn" onclick="copyHash()" title="Copy hash">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <p class="hash-cmd">Run in PowerShell: <code>Get-FileHash .\installers\lock_n_key_setup.exe -Algorithm SHA256</code></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why it's safe callout -->
+                <div class="safety-callout">
+                    <div class="safety-callout-inner">
+                        <h4><i class="fas fa-lock"></i> Why Lock N' Key is Safe</h4>
+                        <ul class="safety-list">
+                            <li><i class="fas fa-check"></i> <strong>Zero network activity</strong> — no outbound connections whatsoever</li>
+                            <li><i class="fas fa-check"></i> <strong>Open source</strong> — every line of code is auditable on GitHub</li>
+                            <li><i class="fas fa-check"></i> <strong>Local-only storage</strong> — data never leaves your device</li>
+                            <li><i class="fas fa-check"></i> <strong>AES-256 encryption</strong> — military-grade encryption at rest</li>
+                            <li><i class="fas fa-check"></i> <strong>No installer telemetry</strong> — the setup exe does not phone home</li>
+                        </ul>
+                        <a href="https://github.com/rtk007/Lock_N-_Key" target="_blank" rel="noopener" class="btn-source">
+                            <i class="fab fa-github"></i> View Source on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Permanent fix tip -->
+                <div class="defender-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <strong>Permanent fix for developers:</strong> You can also add Lock N' Key's install
+                        directory to Windows Defender's exclusion list via
+                        <em>Windows Security → Virus &amp; Threat Protection → Manage Settings → Add or Remove
+                            Exclusions</em>. This prevents future false positives during updates.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="docs-section">
+        <div class="container">
+            <!-- Project Overview Content from Markdown -->
+            <div class="doc-content" data-aos="fade-up">
+
+                <h2>Project Overview</h2>
+                <p><strong>Lock N' Key</strong> is a developer-first, local-only password manager built with
+                    <strong>Flutter Desktop</strong>. It prioritizes <strong>Zero Trust</strong> architecture, ensuring
+                    that no data ever leaves the user's device. It is designed to integrate seamlessly into a
+                    developer's workflow via global hotkeys and browser extensions.
+                </p>
+
+                <h3>📁 Directory Structure</h3>
+                <pre><code>lib/
+├── main.dart                  # Entry point
+├── app.dart                   # Root widget
+├── models/                    # Data models (Secret, AuditLog)
+├── screens/                   # UI Screens
+├── services/                  # Business Logic & Core Services
+└── widgets/                   # Reusable UI Components</code></pre>
+
+                <h3>🏗️ Architecture & Tech Stack</h3>
+                <ul>
+                    <li><strong>Framework</strong>: Flutter (Windows Desktop focus)</li>
+                    <li><strong>Database</strong>: <code>hive_flutter</code> (NoSQL, fast, encrypted)</li>
+                    <li><strong>Encryption</strong>: <code>encrypt</code> package (AES-256-GCM/CBC)</li>
+                    <li><strong>Biometrics</strong>: <code>local_auth</code> (Windows Hello)</li>
+                    <li><strong>Global Hotkeys</strong>: <code>hotkey_manager</code></li>
+                </ul>
+
+                <hr>
+
+                <h3>🔐 Security Model</h3>
+                <p>The core of Lock N' Key is its "Zero Trust" security model.</p>
+
+                <h4>1. Key Management</h4>
+                <ul>
+                    <li><strong>Master Key (MK)</strong>: Random 32-byte key generated on registration.</li>
+                    <li><strong>Storage</strong>: The MK is <strong>never stored in plain text</strong>. It is encrypted
+                        with your password hash.</li>
+                    <li><strong>Session</strong>: The decrypted MK is held in memory only while the session is active.
+                    </li>
+                </ul>
+
+                <h4>2. Database Encryption</h4>
+                <p>All data in local database boxes is encrypted using the Master Key. Even if the raw files are stolen,
+                    they cannot be read without the password.</p>
+
+                <hr>
+
+                <h3>🛠️ Core Services</h3>
+
+                <h4>1. ServerService (Localhost API)</h4>
+                <p>Runs on port <code>45454</code> (Loopback only) to communicate with the Browser Extension. If the
+                    vault is locked, it requests user authentication on the desktop app before processing any request.
+                </p>
+
+                <h4>2. AuditService</h4>
+                <p>Logs every significant action (Decrypt, Export, Access) for security auditing. Logs are stored in an
+                    encrypted box.</p>
+
+                <hr>
+
+                <h3 id="features">🚀 Key Features</h3>
+
+                <div class="feature-grid-doc">
+                    <div class="feature-item">
+                        <h4>Quick Access (Alt + Space)</h4>
+                        <p>A Spotlight-like overlay to search and paste secrets immediately into your active IDE.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Cross-Device Transfer (.lnk)</h4>
+                        <p>Securely transfer your vault between devices using our encrypted <code>.lnk</code> backup
+                            format.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Browser Integration</h4>
+                        <p>Seamlessly save credentials from Chrome/Edge directly to your local vault via the localhost
+                            API.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Lock N' Key &copy; 2026. Built with Flutter Desktop.</p>
+        <p style="margin-top:8px; font-size:0.85rem;">
+            <a href="https://github.com/rtk007/Lock_N-_Key" target="_blank" rel="noopener" class="contact-link">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function copyHash() {
+            const hash = document.getElementById('fileHash').innerText;
+            navigator.clipboard.writeText(hash).then(() => {
+                const btn = document.querySelector('.copy-hash-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.color = '#03dac6';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i>';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 
 </html>

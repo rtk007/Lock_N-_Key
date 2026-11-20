@@ -95,6 +95,55 @@ class ServerService {
       return Response.ok('', headers: _corsHeaders);
     });
 
+    // Handler for resolving secrets (CLI)
+    router.post('/secrets/resolve', (Request request) async {
+      try {
+        if (!_auth.isAuthenticated) {
+          debugPrint('Server: Vault locked. Requesting user unlock for CLI resolution...');
+          await windowManager.show();
+          await windowManager.focus();
+          _auth.requestAuth();
+
+          bool unlocked = false;
+          for (int i = 0; i < 60; i++) {
+            if (_auth.isAuthenticated) {
+              unlocked = true;
+              break;
+            }
+            await Future.delayed(const Duration(seconds: 1));
+          }
+
+          if (!unlocked) {
+            return Response.forbidden('Vault is locked.', headers: _corsHeaders);
+          }
+          await windowManager.hide();
+        }
+
+        final payload = await request.readAsString();
+        final data = jsonDecode(payload);
+        final aliases = (data['aliases'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
+        final allSecrets = _secretService.getAllSecrets();
+        final resolved = <String, String>{};
+
+        for (final alias in aliases) {
+          final matches = allSecrets.where((s) => s.shortcut == alias || s.name == alias);
+          if (matches.isNotEmpty) {
+            resolved[alias] = matches.first.value;
+          }
+        }
+
+        return Response.ok(jsonEncode({'success': true, 'secrets': resolved}), headers: _corsHeaders);
+      } catch (e) {
+        debugPrint('Server Error: $e');
+        return Response.internalServerError(body: 'Failed to resolve secrets: $e', headers: _corsHeaders);
+      }
+    });
+
+    router.options('/secrets/resolve', (Request request) {
+      return Response.ok('', headers: _corsHeaders);
+    });
+
     // Manual CORS Middleware
     Middleware corsMiddleware() {
       return (Handler innerHandler) {
