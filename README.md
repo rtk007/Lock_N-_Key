@@ -35,18 +35,34 @@ Every time you paste an API key, store credentials in unencrypted `.env` files, 
 * **🔒 Ironclad Local Storage:** Encrypted at rest using AES-256-GCM with locally derived keys.
 * **⚡ Global Quick Access (`Alt + Space`):** Trigger a minimalist overlay anywhere on Windows. Search and paste API keys directly into VS Code, Android Studio, or any terminal without relying on persistent clipboard history.
 * **👆 Biometric Authentication:** Seamless integration with Windows Hello (Fingerprint & Facial Recognition) for instant, secure unlocking.
-* **💻 Developer Secret Resolver CLI (`locknkey run`):** Run your development commands (`npm`, `python`, `docker`) with encrypted credentials dynamically resolved into memory—no plaintext secrets in `.env` files.
+* **💻 Developer Secret Resolver CLI (`locknkey`):** Complete terminal suite (`run`, `list`, `get`, `set`, `delete`, `status`). Run your commands with encrypted credentials dynamically resolved into memory.
+* **🛡️ Git Leak Guard:** Automatic pre-commit hook (`locknkey hook install`) that audits staged commits against your actual vault secrets to block accidental leaks.
+* **📁 Encrypted Secret Files Vault:** Drag-and-drop secure file storage for `.pem`, `.key`, `id_ed25519`, `service-account.json`, `.ovpn`, and `.env` files with in-app text previews and one-click export.
+* **📋 2FA Backup Codes Tracker:** Paste multi-code emergency recovery sets with interactive strike-through tracking and low-code depletion alerts.
+* **⏳ Secret Health & TTL Expiry:** Set expiration presets (`30d`, `90d`, `1y`) with live dashboard health scoring and warning alerts before keys expire.
 * **🧩 Companion Browser Extension:** Dedicated Chrome and Edge extension (Manifest V3) to save credentials directly to your local desktop vault over loopback.
 * **🔄 Cross-Device Encrypted Transfer (.lnk):** Securely backup or migrate your vault across machines using password-protected `.lnk` encrypted archives.
 * **🪟 Windows System Tray Support:** Runs quietly in the background with auto-lock and quick access controls.
 
 ---
 
-## 🛠️ The `locknkey` CLI: Zero-Plaintext Development
+## 🛠️ The `locknkey` CLI: Developer Terminal Suite
 
-Tired of having real API keys and database passwords sitting in plain text `.env` files that might accidentally get committed to Git? Lock N' Key includes a native CLI resolver.
+Lock N' Key includes a native CLI binary built for terminal velocity and script automation.
 
-### How it works:
+### Available Commands:
+```bash
+locknkey run <command> [args...]    # Inject LNK: aliases and execute child process
+locknkey list                       # List all stored secrets, types, and expiry statuses
+locknkey get <alias> [-c, --copy]   # Output secret value to stdout (or copy to clipboard)
+locknkey set <alias> [value]        # Add or update a secret with masked terminal input
+locknkey delete <alias>             # Delete a secret from vault
+locknkey status                     # Check local daemon status and vault lock state
+locknkey hook [install|uninstall]   # Install Git pre-commit leak guard in current repo
+locknkey scan [--staged]            # Audit staged git changes against vault secrets
+```
+
+### Zero-Plaintext Development Workflow:
 1. Define aliases in your `.env` or `.env.local` prefixed with `LNK:`:
    ```env
    # .env
@@ -74,6 +90,26 @@ Tired of having real API keys and database passwords sitting in plain text `.env
 
 ---
 
+## 🛡️ Git Leak Guard: Never Leak a Secret Again
+
+Prevent accidental commits of active credentials to GitHub or GitLab:
+
+```bash
+# Navigate to your Git project root
+locknkey hook install
+```
+
+When you attempt to `git commit`, the hook scans your staged changes directly against your **actual saved vault secrets**. If a secret is detected in your code, the commit is immediately aborted:
+```text
+[Lock N' Key Guard] 🚨 CRITICAL: LEAK DETECTED!
+Your staged changes contain secrets currently stored in your vault:
+  ❌ Secret: "STRIPE_SECRET_KEY" (Shortcut: "stripe_prod")
+
+💡 Replace with 'LNK:stripe_prod' in your .env and run with `locknkey run`.
+```
+
+---
+
 ## 📥 Installation
 
 Pre-packaged Windows installers are available directly in the [`installers/`](installers/) directory:
@@ -94,7 +130,7 @@ Get-FileHash .\installers\lock_n_key_setup.exe -Algorithm SHA256
 ```
 **Expected SHA-256 Hash:**
 ```
-519D50AF9B1EEC0A18419AEB607B384AFD7AB7A101A96E7A7E2C5C0A4A84CA1F
+BCCC18A7D635CABEDBBB9683A699788EE454880C41551D26B82CD57A11DF68A5
 ```
 
 ---

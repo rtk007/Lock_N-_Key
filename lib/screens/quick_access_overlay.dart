@@ -22,7 +22,7 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
   final _auditService = AuditService();
   final _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  
+
   List<Secret> _matches = [];
   Secret? _selectedMatch;
   String _statusMessage = '';
@@ -44,23 +44,23 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
     }
 
     final secrets = _secretService.getAllSecrets();
-    // Prioritize exact shortcut match first
     final exactShortcut = secrets.where((s) => s.shortcut == query || s.shortcut == '//$query').toList();
-    
+
     if (exactShortcut.isNotEmpty) {
-      // Auto-select the first exact match
       setState(() {
         _matches = exactShortcut;
         _selectedMatch = exactShortcut.first;
-        _statusMessage = 'Hit Enter to copy "${_selectedMatch!.name}"';
+        _statusMessage = 'Hit Enter to type "${_selectedMatch!.name}"';
       });
     } else {
-      // Fuzzy search
-      final results = secrets.where((s) => 
-        s.name.toLowerCase().contains(query.toLowerCase()) || 
-        s.shortcut.toLowerCase().contains(query.toLowerCase())
-      ).take(5).toList();
-      
+      final results = secrets
+          .where((s) =>
+              s.name.toLowerCase().contains(query.toLowerCase()) ||
+              s.shortcut.toLowerCase().contains(query.toLowerCase()) ||
+              (s.fileName?.toLowerCase().contains(query.toLowerCase()) ?? false))
+          .take(5)
+          .toList();
+
       setState(() {
         _matches = results;
         _selectedMatch = results.isNotEmpty ? results.first : null;
@@ -69,27 +69,52 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
     }
   }
 
-
-
   Future<void> _executeCopy() async {
     if (_selectedMatch == null) return;
-    
-    // Authenticate
-    final canAuth = await _authService.authenticateUser(context, reason: 'Quick Access "${_selectedMatch!.name}"');
+
+    if (_selectedMatch!.isFile) {
+      setState(() {
+        _statusMessage = 'File item. Open app to export.';
+      });
+      return;
+    }
+
+    final canAuth = await _authService.authenticateUser(
+      context,
+      reason: 'Quick Access "${_selectedMatch!.name}"',
+    );
     if (!canAuth) return;
 
     await _secretService.incrementUsage(_selectedMatch!.id);
     await _auditService.log('QUICK_ACCESS', 'Quick Access', details: _selectedMatch!.name);
 
+    String textToType = _selectedMatch!.value;
+
+    // Handle 2FA Backup Codes: Extract first unused code
+    if (_selectedMatch!.isBackupCodes && _selectedMatch!.metadata != null) {
+      final rawCodes = (_selectedMatch!.metadata!['codes'] as List<dynamic>?) ?? [];
+      final unusedIndex = rawCodes.indexWhere((c) => (c as Map)['used'] != true);
+
+      if (unusedIndex != -1) {
+        final codeMap = Map<String, dynamic>.from(rawCodes[unusedIndex] as Map);
+        textToType = codeMap['code'].toString();
+
+        // Mark as used
+        codeMap['used'] = true;
+        codeMap['usedAt'] = DateTime.now().toIso8601String();
+        rawCodes[unusedIndex] = codeMap;
+
+        final updated = _selectedMatch!.copyWith(metadata: {'codes': rawCodes});
+        await _secretService.saveSecret(updated);
+      }
+    }
+
     setState(() {
       _statusMessage = 'Typing...';
     });
 
-    // Inject Keystrokes via Native C++ Layer
-    // This allows zero-clipboard usage and works with any active window
     try {
-      await KeystrokeService.typeText(_selectedMatch!.value);
-      // Window is automatically hidden by C++ layer
+      await KeystrokeService.typeText(textToType);
       widget.onClose();
     } catch (e) {
       debugPrint('Failed to type secret: $e');
@@ -136,15 +161,15 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
                           hintText: 'Type shortcut (e.g. //aws) or name...',
                           border: InputBorder.none,
                           isDense: true,
-                          suffixIcon: _searchController.text.isNotEmpty 
-                            ? IconButton(
-                                icon: const Icon(Icons.clear, size: 20, color: Colors.grey),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  _onSearchChanged('');
-                                },
-                              )
-                            : null,
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear, size: 20, color: Colors.grey),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    _onSearchChanged('');
+                                  },
+                                )
+                              : null,
                         ),
                         onChanged: _onSearchChanged,
                         onSubmitted: (_) => _executeCopy(),
@@ -154,23 +179,19 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: _statusMessage == 'Copied!' ? Colors.green.withOpacity(0.2) : Colors.white.withOpacity(0.1),
+                          color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          _statusMessage, 
-                          style: TextStyle(
-                            color: _statusMessage == 'Copied!' ? Colors.green : Colors.grey,
-                            fontWeight: FontWeight.bold
-                          )
+                          _statusMessage,
+                          style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
                         ),
                       ),
                     const SizedBox(width: 8),
                     IconButton(
                       icon: const Icon(Icons.home, color: Colors.grey),
                       onPressed: () {
-                         widget.onClose();
-                         // Do not hide window, just return to app
+                        widget.onClose();
                       },
                       tooltip: 'Back to App',
                     ),
@@ -178,8 +199,8 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
                     IconButton(
                       icon: const Icon(Icons.close, color: Colors.grey),
                       onPressed: () {
-                         widget.onClose();
-                         windowManager.hide();
+                        widget.onClose();
+                        windowManager.hide();
                       },
                       tooltip: 'Close Overlay',
                     ),
@@ -195,6 +216,11 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
                   itemBuilder: (context, index) {
                     final secret = _matches[index];
                     final isSelected = _selectedMatch?.id == secret.id;
+
+                    IconData icon = Icons.vpn_key;
+                    if (secret.isFile) icon = Icons.attach_file;
+                    if (secret.isBackupCodes) icon = Icons.checklist;
+
                     return InkWell(
                       onTap: () {
                         setState(() => _selectedMatch = secret);
@@ -205,10 +231,29 @@ class _QuickAccessOverlayState extends State<QuickAccessOverlay> {
                         color: isSelected ? Colors.blue.withOpacity(0.1) : null,
                         child: Row(
                           children: [
-                            Icon(Icons.vpn_key, size: 16, color: isSelected ? Colors.blue : Colors.grey),
+                            Icon(icon, size: 16, color: isSelected ? Colors.blue : Colors.grey),
                             const SizedBox(width: 12),
-                            Text(secret.name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
-                            const Spacer(),
+                            Expanded(
+                              child: Text(
+                                secret.name,
+                                style: TextStyle(
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (secret.isBackupCodes) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text('2FA', style: TextStyle(fontSize: 10, color: Colors.blueAccent)),
+                              ),
+                            ],
+                            const SizedBox(width: 12),
                             if (secret.shortcut.isNotEmpty)
                               Text(secret.shortcut, style: const TextStyle(fontFamily: 'monospace', color: Colors.grey)),
                           ],
